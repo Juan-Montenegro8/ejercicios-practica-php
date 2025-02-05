@@ -1,50 +1,46 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>EJERCICIO 3</title>
-    </head>
-    <body>
-        <?php
-        echo "3. leer edades y peso de 50 personas e indicar el mayor y el menor en edad "
-        . "edad promedio y mayores mayores de 21 y menores de 31<br><br><br>";
-        $personas = array();
-        $contadorEdadGeneral = 0;
-        $contadorEdadEspecifico = 0;
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio 3</title>
+</head>
+<body>
+    <?php
+    echo "<h2>Ejercicio 3</h2>";
+    echo "<p>Leer edades y peso de 50 personas e indicar la mayor y la menor en edad, 
+    edad promedio y cuántos tienen entre 21 y 31 años.</p><hr>";
 
-        for ($i = 0; $i < 50; $i++) {
-            $edadAleatorios = rand(15, 100);
-            $pesoAleatorio = rand(55, 90 );
-            $personas[] = array('edad' => $edadAleatorios, 'peso' => $pesoAleatorio);
+    $personas = [];
+    $sumaEdades = 0;
+    $contadorEdadEspecifico = 0;
+    
+    for ($i = 0; $i < 50; $i++) {
+        $edad = rand(15, 100);
+        $peso = rand(55, 90);
+        $personas[] = ['edad' => $edad, 'peso' => $peso];
+        
+        $sumaEdades += $edad;
+        if ($edad >= 21 && $edad <= 31) {
+            $contadorEdadEspecifico++;
         }
-       
-        echo "Edades y pesos generados:<br>";
-        foreach ($personas as $index => $persona) {
-            echo "Persona $index - Edad: {$persona['edad']}, Peso: {$persona['peso']} kg<br>";
-            if(21<=$persona['edad'] and $persona['edad']<=31){
-                $contadorEdadEspecifico++;
-            }
-            $contadorEdadGeneral += $persona['edad'];
-        }
-        $contadorEdadGeneral /=50;
-
-        $mayorEdad = max(array_column($personas, 'edad'));
-        $personaMayorEdad = array_filter($personas, function($persona) use ($mayorEdad) {
-            return $persona['edad'] == $mayorEdad;
-        });
-        $personaMayorEdad = array_values($personaMayorEdad)[0];
-
-        $menorPeso = min(array_column($personas, 'edad'));
-        $personaMenorEdad = array_filter($personas, function($persona) use ($menorPeso) {
-            return $persona['edad'] == $menorPeso;
-        });
-        $personaMenorEdad = array_values($personaMenorEdad)[0];
-
-        echo "<br>La persona con mayor edad tiene {$personaMayorEdad['edad']} años y pesa {$personaMayorEdad['peso']} kg.<br>";
-        echo "La persona con menor edad tiene {$personaMenorEdad['edad']} años y pesa {$personaMenorEdad['peso']} kg.<br>";
-        echo "La edad promedio fue de: $contadorEdadGeneral<br>";
-        echo "El numero de personas que estan entre 21 años y 31 años son: $contadorEdadEspecifico";
-
-        ?>
-    </body>
+    }
+    
+    // Obtener la persona con mayor y menor edad
+    $mayorEdad = max(array_column($personas, 'edad'));
+    $menorEdad = min(array_column($personas, 'edad'));
+    
+    $personaMayorEdad = current(array_filter($personas, fn($p) => $p['edad'] == $mayorEdad));
+    $personaMenorEdad = current(array_filter($personas, fn($p) => $p['edad'] == $menorEdad));
+    
+    // Calcular edad promedio
+    $edadPromedio = $sumaEdades / count($personas);
+    
+    // Mostrar resultados
+    echo "<h3>Resultados:</h3>";
+    echo "<p>La persona con mayor edad tiene <strong>{$personaMayorEdad['edad']} años</strong> y pesa <strong>{$personaMayorEdad['peso']} kg</strong>.</p>";
+    echo "<p>La persona con menor edad tiene <strong>{$personaMenorEdad['edad']} años</strong> y pesa <strong>{$personaMenorEdad['peso']} kg</strong>.</p>";
+    echo "<p>La edad promedio es de <strong>" . number_format($edadPromedio, 2) . " años</strong>.</p>";
+    echo "<p>El número de personas entre 21 y 31 años es: <strong>$contadorEdadEspecifico</strong>.</p>";
+    ?>
+</body>
 </html>
